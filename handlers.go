@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -45,11 +46,11 @@ func parseRequest(c *gin.Context) (map[string]any, error) {
 	defer c.Request.Body.Close()
 	body, err := io.ReadAll(c.Request.Body)
 	if err != nil {
-		return spec, err
+		return spec, fmt.Errorf("[UserMetaData.main.parseRequest] io.ReadAll error: %w", err)
 	}
 	err = json.Unmarshal(body, &spec)
 	if err != nil {
-		return spec, err
+		return spec, fmt.Errorf("[UserMetaData.main.parseRequest] json.Unmarshal error: %w", err)
 	}
 	return spec, nil
 }
@@ -60,7 +61,7 @@ func parseQueryRequest(c *gin.Context) (services.ServiceRequest, error) {
 	defer c.Request.Body.Close()
 	body, err := io.ReadAll(c.Request.Body)
 	if err != nil {
-		return rec, err
+		return rec, fmt.Errorf("[UserMetaData.main.parseQueryRequest] io.ReadAll error: %w", err)
 	}
 	err = json.Unmarshal(body, &rec)
 	if err != nil {
